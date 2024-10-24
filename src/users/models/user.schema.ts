@@ -4,7 +4,8 @@ import { Role } from '../../roles/role.enum';
 
 export type UserDocument = HydratedDocument<User>;
 
-@Schema()
+
+@Schema({ timestamps: true }) 
 export class User {
   _id: Types.ObjectId;
 
@@ -33,4 +34,9 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
-
+UserSchema.set('toJSON', {
+  transform: (_, ret) => {
+    delete ret.password; 
+    return ret;
+  },
+});

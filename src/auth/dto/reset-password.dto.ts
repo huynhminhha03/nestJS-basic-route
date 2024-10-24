@@ -7,9 +7,6 @@ import {
 } from 'class-validator';
 
 export class ResetPassUserDto {
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
 
   @IsString()
   @IsNotEmpty()

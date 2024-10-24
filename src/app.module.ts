@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
     MailerModule.forRoot({
       transport: {
         
+      
         host: process.env.EMAIL_HOST || 'smtp.gmail.com',
         port: Number(process.env.EMAIL_PORT) || 587,
         secure: false, // true for 465, false for other ports

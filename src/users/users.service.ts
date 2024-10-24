@@ -149,9 +149,10 @@ export class UsersService {
   }
 
   async resetPassword(
+    verifyEmailDto: VerifyEmailDto,
     changePassUserDto: ResetPassUserDto,
   ): Promise<User> {
-    const { user, exists } = await this.checkEmailExists(changePassUserDto.email);
+    const { user, exists } = await this.checkEmailExists(verifyEmailDto.email);
     if (!exists) {
       throw new NotFoundException('User not found');
     }
@@ -162,14 +163,11 @@ export class UsersService {
 
     const newPassword = await this.hashPassword(changePassUserDto.newPassword);
 
-    const updatedUser = await this.userModel
-      .findByIdAndUpdate(user._id, { password: newPassword }, { new: true })
-      .exec();
-
-    if (!updatedUser) {
-      throw new NotFoundException(`User with ID ${user._id} not found`);
-    }
-    return updatedUser;
+    return this.userModel.findByIdAndUpdate(
+      user._id,
+      { password: newPassword },
+      { new: true },
+    );
   }
 
   async updatePassword(

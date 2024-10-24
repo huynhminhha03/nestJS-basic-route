@@ -15,16 +15,17 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserByAdminDto } from './dto/update-user-by-admin.dto';
 import { User } from './models/user.schema';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { Roles } from '../roles/roles.decorator';
-import { RolesGuard } from '../roles/roles.guard';
 import { Role } from '../roles/role.enum';
 import { UpdateInfoUserDto } from './dto/update-info-user.dto';
 import { ChangePassUserDto } from './dto/change-password-user.dto';
+import { Auth } from 'src/auth/auth.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+ 
+  // Route yêu cầu xác thực
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async getCurrentUser(@Request() req: any): Promise<User> {
@@ -32,13 +33,11 @@ export class UsersController {
     return this.usersService.findOne(userId);
   }
 
-  @Get(':username')
-  async findBySlug(
-    @Param('username') username: string,
-  ): Promise<User> {
-   
-    return this.usersService.findByUsername(username);
-  }
+   // Route công khai: không cần xác thực
+   @Get(':username')
+   async findBySlug(@Param('username') username: string): Promise<User> {
+     return this.usersService.findByUsername(username);
+   }
 
   @UseGuards(JwtAuthGuard)
   @Patch('me/update-info')
@@ -61,29 +60,26 @@ export class UsersController {
     return this.usersService.updatePassword(userId, updatePassUserDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin, Role.Staff)
+  // Route yêu cầu quyền Admin hoặc Staff
+  @Auth(Role.Admin, Role.Staff)
   @Get()
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin, Role.Staff)
+  @Auth(Role.Admin, Role.Staff)
   @Get('/admin/:id')
   async findOneByAdmin(@Param('id') id: string): Promise<User> {
     return this.usersService.findOneByAdmin(id);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin, Role.Staff)
+  @Auth(Role.Admin, Role.Staff)
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createByAdmin(createUserDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin, Role.Staff)
+  @Auth(Role.Admin, Role.Staff)
   @Patch(':id')
   async updateByAdmin(
     @Request() req: any,
@@ -92,13 +88,14 @@ export class UsersController {
   ): Promise<User> {
     const userRole = req.user.role;
     if (userRole !== Role.Admin && updateInfoUserDto.role) {
-      throw new UnauthorizedException('You do not have permission to update the role.');
+      throw new UnauthorizedException(
+        'You do not have permission to update the role.',
+      );
     }
     return this.usersService.updateByAdmin(id, updateInfoUserDto);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.Admin)
+  @Auth(Role.Admin)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     return this.usersService.remove(id);

@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
+import helmet from "helmet";
 
 async function bootstrap() {
   dotenv.config();
@@ -10,6 +11,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     
   });
+
+  app.use(helmet());
 
   app.enableCors({
     origin: (origin, callback) => {
@@ -28,6 +31,8 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
   }));
 
-  await app.listen(8080);
+
+  await app.listen(process.env.PORT || 8080);
+
 }
 bootstrap();

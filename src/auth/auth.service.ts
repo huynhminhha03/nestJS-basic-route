@@ -152,12 +152,13 @@ export class AuthService {
   }
 
   async resetPassword(
+    verifyEmailDto: VerifyEmailDto,
     resetPassUserDto: ResetPassUserDto,
   ): Promise<{ user: User; message: string }> {
 
-    delete this.otpForgotPasswords[resetPassUserDto.email];
+    delete this.otpForgotPasswords[verifyEmailDto.email];
 
-    const otpVerifiedTime = this.otpVerifiedTimes[resetPassUserDto.email];
+    const otpVerifiedTime = this.otpVerifiedTimes[verifyEmailDto.email];
     if (!otpVerifiedTime) {
       throw new UnauthorizedException('OTP verification not found!');
     }
@@ -171,11 +172,12 @@ export class AuthService {
     }
 
     const updateUser = await this.usersService.resetPassword(
+      verifyEmailDto,
       resetPassUserDto,
     );
 
     // Xóa thời gian xác thực OTP sau khi đổi mật khẩu thành công
-    delete this.otpVerifiedTimes[resetPassUserDto.email];
+    delete this.otpVerifiedTimes[verifyEmailDto.email];
 
     return { user: updateUser, message: 'Password changed successfully' };
   }
