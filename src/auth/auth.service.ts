@@ -35,6 +35,9 @@ export class AuthService {
       authDto.email,
     );
 
+    console.log('login user', user);
+    console.log('userId', user._id);
+    console.log(typeof user._id);
     if (!exists) {
       throw new UnauthorizedException('Invalid email!');
     }
@@ -54,7 +57,7 @@ export class AuthService {
     }
 
     const payload = {
-      id: user._id,
+      _id: user._id,
       email: user.email,
       username: user.username,
       role: user.role,

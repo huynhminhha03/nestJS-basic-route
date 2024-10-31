@@ -10,7 +10,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { User, UserDocument } from './models/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserByAdminDto } from './dto/update-user-by-admin.dto';
@@ -97,14 +97,15 @@ export class UsersService {
     return { user, exists: !!user };
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(userId: ObjectId): Promise<User> {
     const user = await this.userModel
-      .findOne({ _id: id, isActive: true })
+      .findOne({ _id: userId, isActive: true })
       .exec();
-
+    console.log(userId)
     if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
+      throw new NotFoundException(`User with ID ${userId} not found`);
     }
+    console.log('user', user);
     return user;
   }
 
@@ -125,7 +126,7 @@ export class UsersService {
   }
 
   async updateInfo(
-    userId: string,
+    userId: ObjectId,
     username: string,
     updateUserDto: UpdateInfoUserDto,
   ): Promise<User> {
@@ -171,7 +172,7 @@ export class UsersService {
   }
 
   async updatePassword(
-    userId: string,
+    userId: ObjectId,
     updatePassUserDto: ChangePassUserDto,
   ): Promise<User> {
     if (updatePassUserDto.newPassword === updatePassUserDto.oldPassword) {

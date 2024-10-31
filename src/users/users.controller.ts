@@ -8,7 +8,6 @@ import {
   Delete,
   UseGuards,
   Request,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -24,20 +23,19 @@ import { Auth } from 'src/auth/auth.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
- 
   // Route yêu cầu xác thực
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async getCurrentUser(@Request() req: any): Promise<User> {
-    const userId = req.user.id;
+    const userId = req.user._id;
     return this.usersService.findOne(userId);
   }
 
-   // Route công khai: không cần xác thực
-   @Get(':username')
-   async findBySlug(@Param('username') username: string): Promise<User> {
-     return this.usersService.findByUsername(username);
-   }
+  // Route công khai: không cần xác thực
+  @Get(':username')
+  async findBySlug(@Param('username') username: string): Promise<User> {
+    return this.usersService.findByUsername(username);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Patch('me/update-info')
@@ -45,7 +43,7 @@ export class UsersController {
     @Request() req: any,
     @Body() updateInfoUserDto: UpdateInfoUserDto,
   ): Promise<User> {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const username = req.user.username;
     return this.usersService.updateInfo(userId, username, updateInfoUserDto);
   }
@@ -56,43 +54,37 @@ export class UsersController {
     @Request() req: any,
     @Body() updatePassUserDto: ChangePassUserDto,
   ): Promise<User> {
-    const userId = req.user.id;
+    const userId = req.user._id;
     return this.usersService.updatePassword(userId, updatePassUserDto);
   }
 
-  // Route yêu cầu quyền Admin hoặc Staff
-  @Auth(Role.Admin, Role.Staff)
+  @Auth(Role.Admin)
   @Get()
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
-  @Auth(Role.Admin, Role.Staff)
+  @Auth(Role.Admin)
   @Get('/admin/:id')
   async findOneByAdmin(@Param('id') id: string): Promise<User> {
     return this.usersService.findOneByAdmin(id);
   }
 
-  @Auth(Role.Admin, Role.Staff)
+  @Auth(Role.Admin)
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createByAdmin(createUserDto);
   }
 
-  @Auth(Role.Admin, Role.Staff)
+  @Auth(Role.Admin)
   @Patch(':id')
   async updateByAdmin(
     @Request() req: any,
     @Param('id') id: string,
     @Body() updateInfoUserDto: UpdateUserByAdminDto,
   ): Promise<User> {
-    const userRole = req.user.role;
-    if (userRole !== Role.Admin && updateInfoUserDto.role) {
-      throw new UnauthorizedException(
-        'You do not have permission to update the role.',
-      );
-    }
-    return this.usersService.updateByAdmin(id, updateInfoUserDto);
+  
+    return this.usersService.updateByAdmin( id, updateInfoUserDto);
   }
 
   @Auth(Role.Admin)

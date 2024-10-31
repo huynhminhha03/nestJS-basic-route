@@ -6,12 +6,18 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { TasksModule } from './tasks/tasks.module';
+import { CategoriesModule } from './categories/categories.module';
+import { ProductsModule } from './products/products.module';
+import { AddressesModule } from './addresses/addresses.module';
+import { ColorsModule } from './colors/colors.module';
+import { WishlistsModule } from './wishlists/wishlists.module';
 
 @Module({
   imports: [
     MailerModule.forRoot({
       transport: {
-        
+
       
         host: process.env.EMAIL_HOST || 'smtp.gmail.com',
         port: Number(process.env.EMAIL_PORT) || 587,
@@ -29,6 +35,13 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
     UsersModule,
     MongooseModule.forRoot(process.env.MONGODB_URI || 'mongodb://localhost/nest'),
+    TasksModule,
+    CategoriesModule,
+    ProductsModule,
+    AddressesModule,
+    ColorsModule,
+    WishlistsModule,
+    
   ],
   
 })
