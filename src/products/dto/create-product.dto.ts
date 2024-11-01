@@ -22,9 +22,8 @@ export class CreateProductDto {
   price: number;
 
   @IsOptional()
-  @IsMongoId()
-  category: Types.ObjectId;
-
+  @IsMongoId({ each: true })
+  categories: string[];
 
   @IsNotEmpty()
   @IsArray()

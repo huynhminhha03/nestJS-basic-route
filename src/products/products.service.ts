@@ -40,7 +40,7 @@ export class ProductsService {
     const newProduct = new this.productModel({
       ...createProductDto,
       slug,
-      category: new Types.ObjectId(createProductDto.category),
+      categories: createProductDto.categories.map(id => new Types.ObjectId(id)),
       variants: createProductDto.variants.map((variant) => ({
         color: new Types.ObjectId(variant.color), 
         sizes: variant.sizes,

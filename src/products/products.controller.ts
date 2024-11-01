@@ -7,12 +7,14 @@ import {
   Delete,
   Body,
   Query,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './models/product.schema';
-import { Auth } from 'src/auth/auth.decorator';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/roles/role.enum';
 import { GetProductDto } from './dto/get-product.dto';
 
@@ -52,7 +54,8 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT) 
   async remove(@Param('id') id: string): Promise<void> {
-    return await this.productsService.remove(id);
+    await this.productsService.remove(id);
   }
 }

@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AddressesService } from './addresses.service';
 import { AddressesController } from './addresses.controller';
-import { Address, AddressSchema } from './entities/address.schema';
+import { Address, AddressSchema } from './models/address.schema';
 
 @Module({
   imports: [

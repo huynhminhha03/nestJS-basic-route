@@ -3,7 +3,7 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './models/category.schema';
-import { Auth } from 'src/auth/auth.decorator';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 import { Role } from 'src/roles/role.enum';
 
 @Controller('categories')

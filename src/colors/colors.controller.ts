@@ -3,8 +3,11 @@ import { ColorsService } from './colors.service';
 import { CreateColorDto } from './dto/create-color.dto';
 import { UpdateColorDto } from './dto/update-color.dto';
 import { Color } from './models/color.schema';
+import { Role } from 'src/roles/role.enum';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('colors')
+@Auth(Role.Admin)
 export class ColorsController {
   constructor(private readonly colorsService: ColorsService) {}
 

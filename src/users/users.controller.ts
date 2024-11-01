@@ -13,11 +13,11 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserByAdminDto } from './dto/update-user-by-admin.dto';
 import { User } from './models/user.schema';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/passport/jwt-auth.guard';
 import { Role } from '../roles/role.enum';
 import { UpdateInfoUserDto } from './dto/update-info-user.dto';
 import { ChangePassUserDto } from './dto/change-password-user.dto';
-import { Auth } from 'src/auth/auth.decorator';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 
 @Controller('users')
 export class UsersController {

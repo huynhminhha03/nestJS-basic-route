@@ -11,7 +11,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { AddressesModule } from './addresses/addresses.module';
 import { ColorsModule } from './colors/colors.module';
-import { WishlistsModule } from './wishlists/wishlists.module';
+import { ShopsModule } from './shops/shops.module';
 
 @Module({
   imports: [
@@ -40,7 +40,7 @@ import { WishlistsModule } from './wishlists/wishlists.module';
     ProductsModule,
     AddressesModule,
     ColorsModule,
-    WishlistsModule,
+    ShopsModule,
     
   ],
   

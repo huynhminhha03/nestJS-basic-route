@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId, Types } from 'mongoose';
-import { Address, AddressDocument } from './entities/address.schema';
+import { Address, AddressDocument } from './models/address.schema';
 import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 
@@ -20,7 +20,6 @@ export class AddressesService {
     userId: ObjectId,
   ): Promise<Address> {
 
-    console.log(userId);
     if (createAddressDto.isDefault) {
       await this.addressModel.updateMany(
         { user: userId },

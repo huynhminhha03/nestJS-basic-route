@@ -3,7 +3,7 @@ import { HydratedDocument, Types } from 'mongoose';
 
 export type AddressDocument = HydratedDocument<Address>;
 
-@Schema({ timestamps: true })
+@Schema()
 export class Address {
   _id: Types.ObjectId;
 

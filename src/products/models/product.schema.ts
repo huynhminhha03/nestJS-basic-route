@@ -20,8 +20,8 @@ export class Product {
   @Prop({ unique: true })
   slug: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'Category', required: true }) 
-  category: Types.ObjectId;
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Category' }], required: true }) 
+  categories: Types.ObjectId[];
 
   @Prop({ type: [VariantSchema], default: [] })
   variants: Variant[]; // Mảng các variant của sản phẩm
@@ -30,4 +30,7 @@ export class Product {
   isActive: boolean;
 }
 
+
 export const ProductSchema = SchemaFactory.createForClass(Product);
+
+ProductSchema.index({ isActive: 1, categories: 1 });
